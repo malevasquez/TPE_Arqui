@@ -11,7 +11,7 @@ GLOBAL _exception06Handler
 GLOBAL saveInitialConditions
 
 EXTERN irqDispatcher
-EXTERN exceptionDispatcher
+;EXTERN exceptionDispatcher
 
 SECTION .text
 ;----------------------------------------
@@ -73,21 +73,21 @@ SECTION .text
     iretq
 %endmacro
 
-%macro exceptionHandler 1
-    pushState
-
-	mov rdi, %1 ; pasaje de parametro
-	mov rsi, rsp ; pasaje del "vector" de registros
-	call exceptionDispatcher
-
-    mov rax, [initialConditions] ; rsp
-	mov [rsp + 18*8], rax
-	mov rax, [initialConditions + 8] ; rip
-	mov [rsp + 15*8], rax
-
-	popState
-	iretq
-%endmacro
+; %macro exceptionHandler 1
+;     pushState
+;
+; 	mov rdi, %1 ; pasaje de parametro
+; 	mov rsi, rsp ; pasaje del "vector" de registros
+; 	call exceptionDispatcher
+;
+;     mov rax, [initialConditions] ; rsp
+; 	mov [rsp + 18*8], rax
+; 	mov rax, [initialConditions + 8] ; rip
+; 	mov [rsp + 15*8], rax
+;
+; 	popState
+; 	iretq
+; %endmacro
 
 _cli:
 	cli
@@ -131,13 +131,13 @@ _irq01Handler:
 _irq80Handler:
     irqHandlerMaster 80
 
-;zero Division Exception
-_exception00Handler:
-    exceptionHandler 0
-
-;invalid OpCode Exception
-_exception06Handler:
-    exceptionHandler 6
+; ;zero Division Exception
+; _exception00Handler:
+;     exceptionHandler 0
+;
+; ;invalid OpCode Exception
+; _exception06Handler:
+;     exceptionHandler 6
 
 ;---------------------------------------------------------
 ; Save Initial Registers (to restore in case of exception)
