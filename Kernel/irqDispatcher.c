@@ -1,8 +1,7 @@
 #include <stdint.h>
+#include "time.h"
 
-void int_20() {
-    timer_handler();
-}
+static void int_20();
 
 void irqDispatcher(uint64_t irq) {
     switch(irq) {
@@ -11,4 +10,9 @@ void irqDispatcher(uint64_t irq) {
             break;
     }
     return;
+}
+
+
+void int_20() {
+    timer_handler();
 }

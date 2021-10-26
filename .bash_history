@@ -19,3 +19,13 @@ cd ..
 make clean all
 ls
 exit
+cd root
+ls
+make clean all
+make clean all
+exit
+cd root
+ls
+make clean all
+make clean all
+exit
