@@ -7,12 +7,12 @@
 #include <stdGraphics.h>
 #include <stdio.h>
 #include <stdint.h>
-#include <colors.h>
-#include <commands.h>
-#include <Shell.h>
+//#include <commands.h>
+#include <shell.h>
 #include <stdlib.h>
-#include <chess.h>
-#include <timer.h>
+#include <syscalls.h>
+#include <hangman.h>
+#include <sudoku.h>
 
 static char lines[TOTAL_LINES][MAX_LINE_LENGTH];// = {0};
 static uint8_t lineCursor = 0;
@@ -27,9 +27,9 @@ static void exeCommand(char*);
 static int isCommand(char * name);
 void updateShell(char * buff, int dim);
 
-char commandsNames[][MAX_ARG_LEN]={"time","help","inforeg","chess","printmem","divZero","invalidOPCode","clear","echo","UWU"};
-void  (* run[])(char args[MAX_ARGS][MAX_ARG_LEN]) = {time,help,inforeg,chess,printmem,divZero,invalidOPCode,clear,echo,uwu};
-static int totalCommands = 10;
+// char commandsNames[][MAX_ARG_LEN]={"time","help","inforeg","chess","printmem","divZero","invalidOPCode","clear","echo","UWU"};
+// void  (* run[])(char args[MAX_ARGS][MAX_ARG_LEN]) = {time,help,inforeg,chess,printmem,divZero,invalidOPCode,clear,echo,uwu};
+// static int totalCommands = 10;
 
 void init_shell() {
   setConsoleUpdateFunction(updateShell);
