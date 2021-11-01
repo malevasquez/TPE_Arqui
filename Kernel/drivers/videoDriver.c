@@ -62,7 +62,7 @@ uint16_t WIDTH, HEIGHT;
 uint32_t FRAME_BUFFER;
 
 
-void initVideoDriver() {            
+void initVideoDriver() {
   WIDTH = screenData->width;
   HEIGHT = screenData->height;
   FRAME_BUFFER = screenData->framebuffer;
@@ -88,7 +88,6 @@ void drawPixel(int x, int y, int color) {
     *currentPos = g;
     currentPos++;
     *currentPos = r;
-
 }
 
 void drawRectangle(int x, int y, int width, int height, int color) {
@@ -260,6 +259,3 @@ int drawChar(int character, int color) {
     checkPosition();
     return ret;
 }
-
-
-

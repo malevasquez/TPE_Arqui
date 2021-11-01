@@ -29,3 +29,22 @@ ls
 make clean all
 make clean all
 exit
+cd root
+ls
+make clean all
+exit
+cd root
+ls
+make clean all
+exit
+cd root
+ls
+make clean all
+make clean all
+make clean all
+make clean all
+make clean all
+make clean all
+make clean all
+./run.sh
+exit
