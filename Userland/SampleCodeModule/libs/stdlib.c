@@ -2,6 +2,7 @@
 #define STD_LIB_C value
 #include <stdlib.h>
 
+
 int atoi(char * str);
 // double strToDouble(char * str);
 int intToString(unsigned long long num, char * buffer);

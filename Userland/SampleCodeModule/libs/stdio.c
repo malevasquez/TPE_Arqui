@@ -2,11 +2,10 @@
 #define STD_IO
 
 #include <stdio.h>
-#include <stdarg.h>
-#include <stdint.h>
+// #include <stdarg.h>
+// #include <stdint.h>
 #include <syscalls.h>
 #include <stdlib.h>
-#include <stdGraphics.h>
 
 
 void (*updateConsolePointer)(char *, int);
@@ -72,12 +71,14 @@ void putChar(char ch) {
 }
 
 int readKeyboard(char * buffer, int size) {
-  if (size == 0) return 0;
-  uint64_t aux;
-  isKeyboardEmptySyscall(&aux);
-  uint64_t count = 0;
+  if (size == 0)
+    return 0;
+
+  int aux;
+  isKeyboardEmptySys(&aux);
+  int count = 0;
   if (aux) {
-    readKeyboardSysCall(buffer, (uint8_t) size, &count);
+    readKeyboardSys(buffer, (uint8_t) size, &count);
     return 1;
   }
   return 0;
