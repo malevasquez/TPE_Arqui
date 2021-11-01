@@ -1,7 +1,7 @@
 #ifndef VIDEO_DRIVER_H
 #define VIDEO_DRIVER_H
 
-void initVideoDriver();
+void startVideoDriver();
 
 void clearScreen();
 

@@ -3,11 +3,12 @@
 #include <lib.h>
 #include <videoDriver.h>
 
-// #define BACKGROUND_COLOR 0x000000
-// #define HEIGHT 768
+#define BACKGROUND_COLOR 0x000000
+
 
 unsigned int SCREEN_WIDTH = 1024;
 unsigned int SCREEN_HEIGHT = 768;
+unsigned int FRAME_BUFFER;
 unsigned int SCREEN_bPP = 3;
 
 static unsigned int xPos = 0;
@@ -51,33 +52,37 @@ struct vbe_mode_info_structure {
     uint8_t reserved1[206];
 } __attribute__((packed));
 
-struct vbe_mode_info_structure * screen_data = (void *) 0x5C00; //VBEModeInfoBlock      //por que?
+struct vbe_mode_info_structure * screenData = (void *) 0x5C00; //VBEModeInfoBlock      puntero a la estructura para iniciar el video driver despues
 /*
     uint16_t pitch;           // number of bytes per horizontal line
     uint16_t width;          // width in pixels
     uint16_t height;        // height in pixels
 */
 
-uint16_t WIDTH, HEIGHT;
-uint32_t FRAME_BUFFER;
 
-
-void initVideoDriver() {
-  WIDTH = screenData->width;
-  HEIGHT = screenData->height;
+void startVideoDriver() {
+  SCREEN_WIDTH = screenData->width;
+  SCREEN_HEIGHT = screenData->height;
   FRAME_BUFFER = screenData->framebuffer;
 }
 
 void clearScreen() {
-    for (int i = 0; i < screen_data->height; i++) {
-        for (int j = 0; j < screen_data->width; j++) {
+    for (int i = 0; i < screenData->height; i++) {
+        for (int j = 0; j < screenData->width; j++) {
             drawPixel(i, j, BACKGROUND_COLOR);
         }
     }
 }
 
+int validCoord(int x, int y){
+    if (x >= screenData->height || y >= screenData->width) {
+        return 0;
+    }
+    return 1;
+}
+
 void drawPixel(int x, int y, int color) {
-    char *currentPos = (char *) (uint64_t) screen_data->framebuffer + 3 * (row * screen_data->width + col);
+    char *currentPos = (char *) (uint64_t) screenData->framebuffer + 3 * (row * screenData->width + col);
 
     int b = color & 0xFF;           //blue
     int g = (color >> 8) & 0xFF;    //green
@@ -91,13 +96,13 @@ void drawPixel(int x, int y, int color) {
 }
 
 void drawRectangle(int x, int y, int width, int height, int color) {
-  if (legalCoordinates(x, y)) {
-    int b = col & 0x0000FF;
-    int g = (col >> 8) & 0x0000FF;
-    int r = (col >> 16) & 0x0000FF;
+  if (validCoord(x, y)) {
+    int b = color & 0x0000FF;
+    int g = (color >> 8) & 0x0000FF;
+    int r = (color >> 16) & 0x0000FF;
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
-        if (legalCoordinates(x + j, y + i)) {
+        if (validCoord(x + j, y + i)) {
           int * pos = (int *)(FRAME_BUFFER + ((y + i) * WIDTH + (x + j)) * 3);
           *pos = b;
           pos++;
@@ -110,18 +115,21 @@ void drawRectangle(int x, int y, int width, int height, int color) {
   }
 }
 
-void drawLine(uint64_t xStart, uint64_t yStart, uint64_t xEnd, uint64_t yEnd, uint64_t col) {
-  if (!legalCoordinates(xStart, yStart) || !legalCoordinates(xEnd, yEnd)) return;
-  if(xStart==xEnd){
-    drawVerticalLine(xStart, yStart, yEnd, col);
-  } else {
-    uint8_t b = col & 0x0000FF;
-    uint8_t g = (col >> 8) & 0x0000FF;
-    uint8_t r = ( col >> 16) & 0x0000FF;
+void drawLine(int xStart, int yStart, int xEnd, int yEnd, int color) {
+  if (!validCoord(xStart, yStart) || !validCoord(xEnd, yEnd))
+    return;
+
+  if(xStart == xEnd){
+    drawVerticalLine(xStart, yStart, yEnd, color);
+  }
+  else{
+    int b = col & 0x0000FF;
+    int g = (col >> 8) & 0x0000FF;
+    int r = ( col >> 16) & 0x0000FF;
     float m = (yEnd-yStart)/(xEnd-xStart);
     float b0 = 1.0f * yStart - m*xStart;
-    for(uint64_t i = xStart; i <= xEnd; i++){
-          uint64_t y = (uint64_t) (m * i + b0);
+    for(int i = xStart; i <= xEnd; i++){
+          int y = (uint64_t) (m * i + b0);
           uint8_t * pos = (uint8_t *)(FRAME_BUFFER+ (y * WIDTH + i) * 3);
           *pos = b;
           pos++;
@@ -132,13 +140,16 @@ void drawLine(uint64_t xStart, uint64_t yStart, uint64_t xEnd, uint64_t yEnd, ui
   }
 }
 
-static void drawVerticalLine(uint64_t x, uint64_t yStart, uint64_t yEnd, uint64_t col) {
-  if (!legalCoordinates(x, yStart) || !legalCoordinates(x, yEnd)) return;
-  uint8_t b = col & 0x0000FF;
-  uint8_t g = (col >> 8) & 0x0000FF;
-  uint8_t r = ( col >> 16) & 0x0000FF;
-  for (uint64_t i = yStart; i <= yEnd; i++) {
-    uint8_t * pos = (uint8_t *)(FRAME_BUFFER+ (i * WIDTH + x) * 3);
+static void drawVerticalLine(int x, int yStart, int yEnd, int color) {
+  if (!validCoord(x, yStart) || !validCoord(x, yEnd))
+    return;
+
+  int b = col & 0x0000FF;
+  int g = (col >> 8) & 0x0000FF;
+  int r = ( col >> 16) & 0x0000FF;
+
+  for (int i = yStart; i <= yEnd; i++) {
+    int * pos = (uint8_t *)(FRAME_BUFFER+ (i * WIDTH + x) * 3);
     *pos = b;
     pos++;
     *pos = g;
@@ -173,7 +184,7 @@ static void drawVerticalLine(uint64_t x, uint64_t yStart, uint64_t yEnd, uint64_
 
 //   for (int i = 0; i < height * size; i++){
 //         for (int j = 0; j < width * size; j++){
-//         if (!legalCoordinates(x + j, y + i) ) continue;
+//         if (!validCoord(x + j, y + i) ) continue;
 //         if (mat[ (i/size) * width+(j/size) ] == 0x01000000) continue;
 //         uint64_t col = mat[(i/size)*width+(j/size)];
 //         uint8_t b = col & 0x0000FF;
@@ -190,7 +201,7 @@ static void drawVerticalLine(uint64_t x, uint64_t yStart, uint64_t yEnd, uint64_
 // }
 
 int drawMatrix(int * matrix, int row, int col, int rows, int columns) {
-    if (row < 0 || col < 0 || row + rows > screen_data->height || col + columns > screen_data->width) {
+    if (row < 0 || col < 0 || row + rows > screenData->height || col + columns > screenData->width) {
         return 0;
     }
     int x = col;
@@ -212,15 +223,15 @@ int drawMatrix(int * matrix, int row, int col, int rows, int columns) {
 
 
 int getScreenHeight() {
-    return screen_data->height;
+    return screenData->height;
 }
 
 int getScreenWidth() {
-    return screen_data->width;
+    return screenData->width;
 }
 
 int drawCharFrom(int character, int x, int y, int color) {
-    if (x >= screen_data->height || y >= screen_data->width) {
+    if (x >= screenData->height || y >= screenData->width) {
         return 0;
     }
     switch (character) {
