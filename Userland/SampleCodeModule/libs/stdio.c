@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdint.h>
-#include <syscallsASM.h>
+#include <syscalls.h>
 #include <stdlib.h>
 #include <stdGraphics.h>
 
