@@ -1,5 +1,7 @@
 #ifndef STDC_H
 #define STDC_H
+
+void consoleSize(int maxX, int minX, int maxY, int minY);
 int atoi(char * str);
 int intToString(unsigned long long num, char * buffer);
 int strlen(char *str);

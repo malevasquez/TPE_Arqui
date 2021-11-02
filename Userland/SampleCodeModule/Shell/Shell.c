@@ -9,7 +9,7 @@
 
 // Greeting shell during startup
 int initShell() {
-    //consoleSize(1016, 0, 760, 0);
+    consoleSize(1016, 0, 760, 0);
     clear();
     openHelp();
     printf("Enter command: \n");

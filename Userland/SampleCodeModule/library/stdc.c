@@ -209,3 +209,10 @@ int getError() {
   //readErrorSyscall(&err);
   return err;
 }
+
+//
+//
+
+void consoleSize(int maxX, int minX, int maxY, int minY){
+    SystemCall02(maxX, minX, maxY, minY);
+}
