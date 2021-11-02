@@ -1,4 +1,5 @@
 #include <commands.h>
+#include <stdc.h>
 
 extern void throwOpcode();
 

@@ -181,10 +181,10 @@ void putChar(char ch) {
 int readKeyboard(char * buffer, int size) {
   if (size == 0) return 0;
   uint64_t aux;
-  isKeyboardEmptySyscall(&aux);
+  //isKeyboardEmptySyscall(&aux);
   uint64_t count = 0;
   if (aux) {
-    readKeyboardSysCall(buffer, (uint8_t) size, &count);
+    //readKeyboardSysCall(buffer, (uint8_t) size, &count);
     return 1;
   }
   return 0;
@@ -199,13 +199,13 @@ char getChar() {
   char ch = 0;
   uint64_t count;
   while(ch == 0 || count == 0) {
-    readKeyboardSysCall(&ch, 1, &count);
+    //readKeyboardSysCall(&ch, 1, &count);
   }
   return ch;
 }
 
 int getError() {
   uint64_t err = 32;
-  readErrorSyscall(&err);
+  //readErrorSyscall(&err);
   return err;
 }
