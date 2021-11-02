@@ -11,7 +11,7 @@ GLOBAL _exception06Handler
 GLOBAL saveInitialConditions
 
 EXTERN irqDispatcher
-;EXTERN exceptionDispatcher
+EXTERN exceptionDispatcher
 
 SECTION .text
 ;----------------------------------------
