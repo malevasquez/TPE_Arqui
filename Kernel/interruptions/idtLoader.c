@@ -38,12 +38,15 @@ void load_idt() {
   _cli();
 
   //interrupciones habilitadas
-  setup_IDT_entry (0x20, (uint64_t) &_irq00Handler);
-  setup_IDT_entry(0x21, (uint64_t) & _irq01Handler);
-  setup_IDT_entry(0x80, (uint64_t) & _irq80Handler);
-  //setup_IDT_entry(0x00, (uint64_t) & _exception00Handler);
-  //setup_IDT_entry(0x06, (uint64_t) & _exception06Handler);
+  setup_IDT_entry (0x20, (uint64_t) &_irq00Handler); //timer tick
+  setup_IDT_entry(0x21, (uint64_t) & _irq01Handler); //keyboard
+  setup_IDT_entry(0x80, (uint64_t) & _irq80Handler); //int 80h
 
+  //excepciones habilitadas
+  setup_IDT_entry(0x00, (uint64_t) & _exception00Handler);
+  setup_IDT_entry(0x06, (uint64_t) & _exception06Handler);
+
+  //timer tick y teclado habilitados
   picMasterMask(0xFE);
   picSlaveMask(0xFF);
 

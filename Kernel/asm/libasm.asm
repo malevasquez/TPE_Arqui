@@ -1,27 +1,77 @@
-GLOBAL cpuVendor
+;GLOBAL cpuVendor
+GLOBAL getSeconds
+GLOBAL getMinutes
+GLOBAL getHours
+GLOBAL getDay
+GLOBAL getMonth
+GLOBAL getYear
 
 section .text
-	
-cpuVendor:
-	push rbp
-	mov rbp, rsp
 
-	push rbx
+; cpuVendor:
+; 	push rbp
+; 	mov rbp, rsp
+;
+; 	push rbx
+;
+; 	mov rax, 0
+; 	cpuid
+;
+;
+; 	mov [rdi], ebx
+; 	mov [rdi + 4], edx
+; 	mov [rdi + 8], ecx
+;
+; 	mov byte [rdi+13], 0
+;
+; 	mov rax, rdi
+;
+; 	pop rbx
+;
+; 	mov rsp, rbp
+; 	pop rbp
 
+;---------------------------------------------------------
+;	Real Time Clock and Memory (ports 70h & 71h)
+;---------------------------------------------------------
+getSeconds:
 	mov rax, 0
-	cpuid
+	mov al, 0
+	out 70h, al
+	in al, 71h
+	ret
 
+getMinutes:
+	mov rax,0
+	mov al, 2
+	out 70h, al
+	in al, 71h
+	ret
 
-	mov [rdi], ebx
-	mov [rdi + 4], edx
-	mov [rdi + 8], ecx
+getHours:
+	mov rax,0
+	mov al, 4
+	out 70h, al
+	in al, 71h
+	ret
 
-	mov byte [rdi+13], 0
+getDay:
+	mov rax,0
+	mov al, 7
+	out 70h, al
+	in al, 71h
+	ret
 
-	mov rax, rdi
+getMonth:
+	mov rax,0
+	mov al, 8
+	out 70h, al
+	in al, 71h
+	ret
 
-	pop rbx
-
-	mov rsp, rbp
-	pop rbp
+getYear:
+	mov rax,0
+	mov al, 9
+	out 70h, al
+	in al, 71h
 	ret
