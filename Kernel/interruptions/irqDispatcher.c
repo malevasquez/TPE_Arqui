@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <time.h>
+#include <interrupts.h>
 
 #define TIMER_TICK 0
 #define KEYBOARD 1

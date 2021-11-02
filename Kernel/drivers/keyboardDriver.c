@@ -16,7 +16,6 @@
 #define ESC 27
 
 
-
 static char keyMap[][2] = {{0, 0}, {0, 0}, {'1', '!'}, {'2', '@'}, {'3', '#'}, {'4', '$'}, {'5', '%'}, {'6', '^'}, {'7', '&'},
 {'8', '*'}, {'9', '('}, {'0', ')'}, {'-', '_'}, {'=', '+'}, {'\b', '\b'}, {'\t', '\t'}, {'q', 'Q'}, {'w', 'W'}, {'e', 'E'}, {'r', 'R'},
 {'t', 'T'}, {'y', 'Y'}, {'u', 'U'}, {'i', 'I'}, {'o', 'O'}, {'p', 'P'}, {'[', '{'}, {']', '}'}, {'\n', '\n'}, {0, 0}, {'a', 'A'},
@@ -35,9 +34,10 @@ static uint64_t capsLock = 0;
 //detecta que tecla esta presionada
 int keyboardHandler() {
     int scanCode;
-    while (readKeyboard()) {
+    //readKeyboard();
+    while (1) {
         scanCode = getScancode();
-        switch(scanCode):
+        switch(scanCode) {
             //shift presionado -> prendo flag
             case LEFT_SHIFT:
             case RIGHT_SHIFT:
@@ -55,7 +55,7 @@ int keyboardHandler() {
             //CONSULTAR: considero ctrl, alt, etc? hasta donde
             //si no es una tecla especial
             default:
-                if (scanCode >= 0 && scanCode < KEY_COUNT && pressCodes[scanCode][0] != 0) {
+                if (scanCode >= 0 && scanCode < KEY_COUNT && keyMap[scanCode][0] != 0) {
                     addToBuffer(keyToAscii(scanCode));
                     return 1;
                 }

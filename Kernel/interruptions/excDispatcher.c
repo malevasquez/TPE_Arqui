@@ -7,7 +7,7 @@
 static void zeroDivision();
 static void invalidOpcode();
 
-void excDispatcher(int exception) {
+void exceptionDispatcher(int exception) {
     switch(exception) {
         case DIV_ZERO:
             zeroDivision();

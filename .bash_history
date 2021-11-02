@@ -68,3 +68,15 @@ make clean all
 make all
 make clean all
 make clean all
+cd root
+exit
+cd root
+make clean all
+make clean all
+make clean all
+make clean all
+make clean all
+make clean all
+make clean all
+make clean all
+exit

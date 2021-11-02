@@ -9,3 +9,7 @@ int keyboardHandler();
 extern int keyboardActivated();
 
 extern unsigned char getScancode();
+
+void addToBuffer(char c);
+
+char keyToAscii(int scancode);
