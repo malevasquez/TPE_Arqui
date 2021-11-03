@@ -85,16 +85,18 @@ int getint(const char message[], ... ) {
 
 char readLetter(void) {
     char letter;
-    printf("Please enter a letter: ");
-    letter = getchar();
-    if(letter != '\n')
-        DELETE_BUFFER;
+    do {
+        printf("Please enter a letter: ");
+        letter = getchar();
+        if(letter != '\n')
+            DELETE_BUFFER;
+    } while(letter < 'a' || letter > 'z');
     return letter;
 }
 
 int checkLetter(const char word[], char letter, short found[]) {
     int i, ok = 0;
-
+    
     for (i = 0; word[i]; i++)
         if (word[i] == letter)
         {
